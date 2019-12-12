@@ -11,6 +11,7 @@ import java.io.StreamCorruptedException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -28,6 +29,7 @@ public class Principal extends javax.swing.JFrame {
     int remove;
     int count;
     boolean respuesta;
+    private static final String PREDETERMINADO = "default.png";
     Contactos c;
     ImageIcon iI = new ImageIcon();
 
@@ -37,6 +39,17 @@ public class Principal extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         sdf.setLenient(false);
         count = 0;
+        //Contactos de prueba
+        ImageIcon icon = new ImageIcon(PREDETERMINADO);
+        Contactos c1 = new Contactos("08647651L", "Pepito", "Pepon", "Papo", 981137131, new Date(91, 11, 2), "Amigo", icon);
+        Contactos c2 = new Contactos("85364721Z", "Rodrigo", "Castro", "Fernandez", 562818654, new Date(99, 5, 20), "Enemigo", icon);
+        Contactos c3 = new Contactos("32074238W", "Sonia", "Calvo", "Pelon", 268172697, new Date(89, 0, 15), "Trabajo", icon);
+        Contactos c4 = new Contactos("78551354Y", "Marta", "Muerta", "Morto", 945678123, new Date(98, 6, 7), "Familiar", icon);
+
+        contacto.add(c1);
+        contacto.add(c2);
+        contacto.add(c3);
+        contacto.add(c4);
 
         if (contacto.isEmpty()) {
             e = Estado.ANHADIENDO;
@@ -67,7 +80,6 @@ public class Principal extends javax.swing.JFrame {
 
     private void editarContacto() throws ParseException, NumberFormatException {
         c = contacto.get(avance);
-        //c.setNif(txtNif.getText());
         c.setNombre(txtNombre.getText());
         c.setApellido1(txtApellido1.getText());
         c.setApellido2(txtApellido2.getText());
@@ -357,7 +369,7 @@ public class Principal extends javax.swing.JFrame {
         } else {
             if (txtTelefono.getText().length() == 9) {
                 if (lblImgPerfil.getIcon() == null) {
-                    iI = new ImageIcon("default.png");
+                    iI = new ImageIcon(PREDETERMINADO);
                     lblImgPerfil.setIcon(iI);
                 }
                 contacto.add(new Contactos(txtNif.getText(), txtNombre.getText(),
@@ -389,17 +401,13 @@ public class Principal extends javax.swing.JFrame {
         count = 0;
         lblImgPerfil.setText("");
         File file;
-        int respuesta = fcGuardarCargar.showOpenDialog(null);
+        int respuestas = fcGuardarCargar.showOpenDialog(null);
         file = fcGuardarCargar.getSelectedFile();
-        if (JFileChooser.APPROVE_OPTION == respuesta) {
+        if (JFileChooser.APPROVE_OPTION == respuestas) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {;
 
                 contacto = (ArrayList<Contactos>) ois.readObject();
-            } catch (FileNotFoundException ex) {
-                JOptionPane.showMessageDialog(null, "Error al cargar fichero", "Error", JOptionPane.ERROR_MESSAGE);
-            } catch (ClassNotFoundException ex) {
-                JOptionPane.showMessageDialog(null, "Error al cargar fichero", "Error", JOptionPane.ERROR_MESSAGE);
-            } catch (StreamCorruptedException ex) {
+            } catch (FileNotFoundException | ClassNotFoundException | StreamCorruptedException ex) {
                 JOptionPane.showMessageDialog(null, "Error al cargar fichero", "Error", JOptionPane.ERROR_MESSAGE);
             }
             e = Estado.NAVEGANDO;
