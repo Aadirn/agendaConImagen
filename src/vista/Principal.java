@@ -996,11 +996,13 @@ public class Principal extends javax.swing.JFrame {
         String nif = txtNif.getText();
         if (nif.length() == 9) {
 
-        } else {
+        } else if (nif.length()==8){
             nif = nif.substring(0, 8);
             int calc = Integer.parseInt(nif) % 23;
             char letra = letrasNif.get(calc);
             txtNif.setText(txtNif.getText() + "" + letra);
+        }else{
+            
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
